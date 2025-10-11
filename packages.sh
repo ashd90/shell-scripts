@@ -24,28 +24,28 @@ echo "Detected distribution: $DISTRO_ID"
 
 # ... (distribution identification code from above) ...
 
-PACKAGE_NAME="kubectl" # Replace with the actual package name
+read -p "Enter the packages: " user_packages
 
 case "$DISTRO_ID" in
     ubuntu|debian)
         sudo apt-get update
-        sudo apt-get install -y "$PACKAGE_NAME"
+        sudo apt-get install -y $user_packages
         ;;
     fedora|centos|rhel)
-        sudo dnf install -y "$PACKAGE_NAME" # Use dnf for modern RHEL-based, yum for older
+        sudo dnf install -y $user_packages # Use dnf for modern RHEL-based, yum for older
         ;;
     arch)
-        sudo pacman -S --noconfirm "$PACKAGE_NAME"
+        sudo pacman -S --noconfirm $user_packages --needed
         ;;
     *)
-        echo "Unsupported distribution: $DISTRO_ID. Please install $PACKAGE_NAME manually."
+        echo "Unsupported distribution: $DISTRO_ID. Please install $user_packages manually."
         exit 1
         ;;
 esac
 
 if [ $? -eq 0 ]; then
-    echo "$PACKAGE_NAME installed successfully."
+    echo "$user_packages installed successfully."
 else
-    echo "Failed to install $PACKAGE_NAME."
+    echo "Failed to install $user_packages."
     exit 1
 fi
