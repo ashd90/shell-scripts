@@ -1,0 +1,85 @@
+/* 🌿 Jungle Waybar Theme for Hyprland
+   Earthy greens, amber glow, and misty transparency.
+   Matches your jungle-style Rofi power menu. */
+
+* {
+    font-family: JetBrainsMono Nerd Font, monospace;
+    font-size: 12px;
+    color: #d9f5c4;
+}
+
+window#waybar {
+    background: rgba(20, 30, 20, 0.85);
+    border-bottom: 2px solid #8ec07c;
+    backdrop-filter: blur(10px);
+    transition: background 0.3s ease;
+}
+
+/* --- Workspaces --- */
+#workspaces button {
+    padding: 0 8px;
+    margin: 2px;
+    border-radius: 6px;
+    background: rgba(40, 60, 40, 0.5);
+    color: #b8bb26;
+    transition: background 0.3s, color 0.3s;
+}
+
+#workspaces button.active {
+    background: #8ec07c;
+    color: #1d2021;
+    font-weight: bold;
+}
+
+#workspaces button:hover {
+    background: #a9b665;
+    color: #1d2021;
+}
+
+/* --- Modules --- */
+#clock { color: #d8a657; }
+#cpu { color: #8ec07c; }
+#memory { color: #a9b665; }
+#temperature { color: #d3869b; }
+#disk { color: #83a598; }
+#network { color: #b8bb26; }
+#pulseaudio { color: #fabd2f; }
+#battery { color: #ebdbb2; }
+#battery.charging { color: #b8bb26; }
+#custom-power { color: #ea6962; }
+
+/* --- System Tray --- */
+#tray {
+    padding-right: 10px;
+}
+
+/* --- Spacing and Padding --- */
+#clock, #network, #pulseaudio, #battery, #tray,
+#window, #cpu, #memory, #temperature, #disk, #custom-power {
+    padding: 0 10px;
+    background: transparent;
+}
+
+/* --- Hover Effects --- */
+#cpu:hover,
+#memory:hover,
+#temperature:hover,
+#disk:hover,
+#network:hover,
+#pulseaudio:hover,
+#battery:hover,
+#custom-power:hover {
+    background: rgba(60, 80, 60, 0.4);
+    border-radius: 8px;
+    color: #f9f5d7;
+}
+
+/* --- Tooltips --- */
+tooltip {
+    background: rgba(35, 45, 35, 0.95);
+    color: #f0f0d8;
+    border: 1px solid #8ec07c;
+    border-radius: 6px;
+    padding: 5px 8px;
+}
+
