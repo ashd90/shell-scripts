@@ -1,0 +1,71 @@
+/* 🌿 Jungle Rofi Power Menu — nature-inspired green theme */
+configuration {
+    font: "JetBrainsMono Nerd Font 12";
+    show-icons: true;
+    icon-theme: "Papirus";
+}
+
+* {
+    background-color: transparent;
+    border: 0;
+    padding: 5px;
+    spacing: 0;
+}
+
+window {
+    transparency: "real";
+    background-color: rgba(20, 30, 20, 0.85);
+    border-radius: 18px;
+    border: 2px solid #8ec07c;
+    width: 260px;
+    location: center;
+}
+
+mainbox {
+    background-color: transparent;
+    children: [inputbar, listview];
+    spacing: 10px;
+    padding: 20px;
+}
+
+inputbar {
+    background-color: rgba(35, 50, 35, 0.8);
+    border-radius: 10px;
+    padding: 5px 10px;
+    font: "JetBrainsMono Nerd Font 11";
+    text-color: #d8e5c1;
+}
+
+listview {
+    columns: 1;
+    lines: 5;
+    spacing: 8px;
+    fixed-height: false;
+}
+
+element {
+    background-color: rgba(45, 60, 45, 0.6);
+    border-radius: 10px;
+    padding: 10px;
+    text-color: #d9f5c4;
+    font: "JetBrainsMono Nerd Font 12";
+    orientation: horizontal;
+    transition: 0.2s;
+}
+
+element selected {
+    background-color: #8ec07c;
+    text-color: #1d2021;
+}
+
+element-text {
+    vertical-align: 0.5;
+    horizontal-align: 0.5;
+}
+
+element-icon {
+    size: 22px;
+    margin: 5px;
+    text-color: inherit;
+}
+
