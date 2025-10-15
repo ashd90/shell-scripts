@@ -23,3 +23,4 @@ Add this to your ~/.config/hypr/hyprland.conf for a nice background blur when Ro
 windowrulev2 = blur, class:^(rofi)$
 windowrulev2 = opacity 0.9, class:^(rofi)$
 
+🌿 ~/.config/waybar/style.css — Jungle Theme
