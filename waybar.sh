@@ -1,26 +1,57 @@
 #!/usr/bin/env bash
 # =====================================================
-# Default Waybar configuration setup for Hyprland
+# 🌈 Colourful Waybar config for Hyprland
+# Includes CPU, memory, disk, temperature & power menu
 # =====================================================
 
 CONFIG_DIR="$HOME/.config/waybar"
 CONFIG_FILE="$CONFIG_DIR/config.jsonc"
 STYLE_FILE="$CONFIG_DIR/style.css"
+SCRIPTS_DIR="$CONFIG_DIR/scripts"
 
-# Create directory if not exists
-mkdir -p "$CONFIG_DIR"
+mkdir -p "$CONFIG_DIR" "$SCRIPTS_DIR"
 
 # -----------------------------------------------------
-# Write Waybar JSON configuration
+# Power menu script (uses rofi)
+# -----------------------------------------------------
+cat > "$SCRIPTS_DIR/power-menu.sh" << 'EOF'
+#!/usr/bin/env bash
+# Simple power menu using rofi
+
+chosen=$(echo -e " Lock\n󰍃 Logout\n Reboot\n Shutdown\n Suspend" | rofi -dmenu -i -p "Power")
+
+case "$chosen" in
+  " Lock") hyprlock ;;
+  "󰍃 Logout") hyprctl dispatch exit ;;
+  " Reboot") systemctl reboot ;;
+  " Shutdown") systemctl poweroff ;;
+  " Suspend") systemctl suspend ;;
+esac
+EOF
+chmod +x "$SCRIPTS_DIR/power-menu.sh"
+
+# -----------------------------------------------------
+# Waybar JSON configuration
 # -----------------------------------------------------
 cat > "$CONFIG_FILE" << 'EOF'
 {
     "layer": "top",
     "position": "top",
     "height": 30,
+
     "modules-left": ["hyprland/workspaces", "hyprland/window"],
     "modules-center": ["clock"],
-    "modules-right": ["network", "pulseaudio", "battery", "tray"],
+    "modules-right": [
+        "cpu",
+        "memory",
+        "temperature",
+        "disk",
+        "network",
+        "pulseaudio",
+        "battery",
+        "tray",
+        "custom/power"
+    ],
 
     "hyprland/workspaces": {
         "format": "{name}",
@@ -32,8 +63,29 @@ cat > "$CONFIG_FILE" << 'EOF'
     },
 
     "clock": {
-        "format": "{:%a %d %b %H:%M}",
-        "tooltip-format": "<big>{:%Y-%m-%d}</big>",
+        "format": "  {:%a %d %b %H:%M}",
+        "interval": 60
+    },
+
+    "cpu": {
+        "format": "  {usage}%",
+        "interval": 5
+    },
+
+    "memory": {
+        "format": "  {used:0.1f}G",
+        "interval": 5
+    },
+
+    "temperature": {
+        "format": "  {temperatureC}°C",
+        "hwmon-path": "/sys/class/thermal/thermal_zone0/temp",
+        "critical-threshold": 80
+    },
+
+    "disk": {
+        "format": "  {free}",
+        "path": "/",
         "interval": 60
     },
 
@@ -51,8 +103,14 @@ cat > "$CONFIG_FILE" << 'EOF'
 
     "battery": {
         "format": "{icon} {capacity}%",
-        "format-icons": ["", "", "", "", ""],
+        "format-icons": ["","","","",""],
         "interval": 60
+    },
+
+    "custom/power": {
+        "format": "",
+        "on-click": "~/.config/waybar/scripts/power-menu.sh",
+        "tooltip": false
     },
 
     "tray": {
@@ -62,46 +120,79 @@ cat > "$CONFIG_FILE" << 'EOF'
 EOF
 
 # -----------------------------------------------------
-# Write Waybar CSS style
+# Waybar CSS style — colorful & modern
 # -----------------------------------------------------
 cat > "$STYLE_FILE" << 'EOF'
+/* 🌈 Waybar colorful theme for Hyprland */
 * {
     font-family: JetBrainsMono Nerd Font, monospace;
     font-size: 12px;
-    color: #ffffff;
+    color: #e0e0e0;
 }
 
 window#waybar {
-    background-color: rgba(30, 30, 30, 0.85);
-    border-bottom: 2px solid #5e81ac;
+    background: rgba(25, 25, 35, 0.8);
+    border-bottom: 2px solid #89b4fa;
+    backdrop-filter: blur(10px);
 }
 
 #workspaces button {
     padding: 0 8px;
     margin: 2px;
     border-radius: 6px;
-    background-color: transparent;
-    color: #ffffff;
+    background: transparent;
+    color: #d8dee9;
+    transition: background 0.3s;
 }
 
 #workspaces button.active {
-    background-color: #5e81ac;
+    background: #89b4fa;
+    color: #1e1e2e;
 }
 
-#clock, #network, #pulseaudio, #battery, #tray, #window {
+#workspaces button:hover {
+    background: #b4befe;
+    color: #1e1e2e;
+}
+
+/* Module colors */
+#clock { color: #f9e2af; }
+#cpu { color: #a6e3a1; }
+#memory { color: #fab387; }
+#temperature { color: #f38ba8; }
+#disk { color: #94e2d5; }
+#network { color: #89dceb; }
+#pulseaudio { color: #cba6f7; }
+#battery { color: #f2cdcd; }
+#battery.charging { color: #a6e3a1; }
+
+#custom-power {
+    color: #f38ba8;
     padding: 0 10px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+#custom-power:hover {
+    background-color: #f38ba8;
+    color: #1e1e2e;
 }
 
-#battery.charging {
-    color: #a3be8c;
+#tray {
+    padding-right: 10px;
+}
+
+#clock, #network, #pulseaudio, #battery, #tray, #window, #cpu, #memory, #temperature, #disk {
+    padding: 0 10px;
 }
 EOF
 
 # -----------------------------------------------------
 # Reload or start Waybar
 # -----------------------------------------------------
-echo "✅ Waybar config created at: $CONFIG_FILE"
-echo "✅ Waybar style created at:  $STYLE_FILE"
+echo "✅ Colourful Waybar with Power Menu configured!"
+echo "📂 Config:  $CONFIG_FILE"
+echo "🎨 Style:   $STYLE_FILE"
+echo "⚙️  Script:  $SCRIPTS_DIR/power-menu.sh"
 
 if pgrep -x "waybar" > /dev/null; then
     echo "🔁 Reloading Waybar..."
